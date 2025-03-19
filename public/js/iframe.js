@@ -1,4 +1,5 @@
 class IframeApi {
+    iframe;
     static DEFAULT_OPTIONS = {
         room: 'default-room',
         name: 'guest',
@@ -84,5 +85,11 @@ class IframeApi {
 
     appendIframeToParentNode(iframe) {
         this.options.parentNode.appendChild(iframe);
+    } 
+    sendMessage(command){
+        this.iframe.contentWindow.postMessage(command, '*');
+    }
+    toggleVideo(){
+        this.sendMessage({command:'toggleVideo'});
     }
 }
