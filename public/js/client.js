@@ -1213,6 +1213,7 @@ function initClientPeer() {
     signalingSocket.on("videoPlayer", handleVideoPlayer);
     signalingSocket.on("disconnect", handleDisconnect);
     signalingSocket.on("removePeer", handleRemovePeer);
+    signalingSocket.on("rpgMeet", handleRpgMeet);
 } // end [initClientPeer]
 
 /**
@@ -9867,12 +9868,6 @@ function handlePeerAction(config) {
     console.log("Handle peer action: ", config);
     const { peer_id, peer_name, peer_use_video, peer_action } = config;
 
-    const isRpgMeet = peer_action.type === "rpgMeet";
-    if (isRpgMeet) {
-        handleRgpMeet(peer_action);
-        return;
-    }
-
     switch (peer_action) {
         case "muteAudio":
             setMyAudioOff(peer_name);
@@ -9900,7 +9895,8 @@ function handlePeerAction(config) {
     }
 }
 
-function handleRgpMeet(rgpMeetEvent) {
+function handleRpgMeet(rgpMeetEvent) {
+    console.log({ rgpMeetEvent });
     window.parent.postMessage(rgpMeetEvent, "*");
 }
 

@@ -1,7 +1,10 @@
 window.addEventListener("message", (event) => {
     const isRpgMeetEvent = event.data.type === "rpgMeet";
     if (isRpgMeetEvent) {
-        emitPeersAction(event.data);
+        sendToServer("rpgMeet", {
+            room_id: roomId,
+            data: event.data,
+        });
     }
     const isSetNicknameEvent = event.data.type === "setNickname";
     if (isSetNicknameEvent) {

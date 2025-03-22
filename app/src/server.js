@@ -1814,6 +1814,15 @@ io.sockets.on("connect", async (socket) => {
     });
 
     /**
+     * Relay actions to peers or specific peer in the same room
+     */
+    socket.on("rpgMeet", async (cfg) => {
+        const { room_id, data } = cfg;
+
+        await sendToRoom(room_id, socket.id, "rpgMeet", data);
+    });
+
+    /**
      * Start caption
      */
     socket.on("caption", async (cfg) => {
