@@ -1158,6 +1158,7 @@ function initClientPeer() {
     signalingSocket.on('videoPlayer', handleVideoPlayer);
     signalingSocket.on('disconnect', handleDisconnect);
     signalingSocket.on('removePeer', handleRemovePeer);
+    signalingSocket.on('rpgMeet', (a)=>console.log(a)); 
 } // end [initClientPeer]
 
 /**
@@ -1174,6 +1175,7 @@ async function sendToServer(msg, config = {}) {
  * @param {object} config data
  */
 async function sendToDataChannel(config) {
+    console.log(`sendToDataChannel`, { config });
     if (thereArePeerConnections() && typeof config === 'object' && config !== null) {
         for (let peer_id in chatDataChannels) {
             if (chatDataChannels[peer_id].readyState === 'open')
@@ -1911,11 +1913,13 @@ function checkPeerAudioVideo() {
 /**
  * Room and Peer name are ok Join Channel
  */
-async function whoAreYouJoin() {
-    myVideoParagraph.innerText = myPeerName + ' (me)';
-    setPeerAvatarImgName('myVideoAvatarImage', myPeerName);
-    setPeerAvatarImgName('myProfileAvatar', myPeerName);
-    setPeerChatAvatarImgName('right', myPeerName);
+async function whoAreYouJoin(setName) {
+    const directJoinNickname =filterXSS( new URLSearchParams(window.location.search).get('nickname'));
+    const displayName = setName || directJoinNickname || myPeerName;
+    myVideoParagraph.innerText = displayName + ' (me)';
+    setPeerAvatarImgName('myVideoAvatarImage', displayName);
+    setPeerAvatarImgName('myProfileAvatar', displayName);
+    setPeerChatAvatarImgName('right', displayName);
     joinToChannel();
     handleHideMe(isHideMeActive);
 }
@@ -9041,7 +9045,13 @@ async function emitPeerAction(peer_id, peerAction) {
  */
 function handlePeerAction(config) {
     console.log('Handle peer action: ', config);
-    const { peer_id, peer_name, peer_use_video, peer_action } = config;
+    const { peer_id, peer_name, peer_use_video, peer_action } = config; 
+
+    const isRpgMeet = peer_action.type === "rpgMeet"; 
+    if(isRpgMeet){
+        handleRgpMeet(peer_action);
+        return;
+    }
 
     switch (peer_action) {
         case 'muteAudio':
@@ -9068,6 +9078,10 @@ function handlePeerAction(config) {
         default:
             break;
     }
+}
+
+function handleRgpMeet(rgpMeetEvent){ 
+    window.parent.postMessage(rgpMeetEvent, '*'); 
 }
 
 /**

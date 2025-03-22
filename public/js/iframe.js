@@ -85,11 +85,5 @@ class IframeApi {
 
     appendIframeToParentNode(iframe) {
         this.options.parentNode.appendChild(iframe);
-    } 
-    sendMessage(command){
-        this.iframe.contentWindow.postMessage(command, '*');
-    }
-    toggleVideo(){
-        this.sendMessage({command:'toggleVideo'});
-    }
+    }  
 }
