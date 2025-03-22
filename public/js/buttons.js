@@ -40,7 +40,7 @@ let buttons = {
     },
     settings: {
         showMicOptionsBtn: true,
-        showTabRoomPeerName: true,
+        showTabRoomPeerName: false,
         showTabRoomParticipants: true,
         showTabRoomSecurity: true,
         showTabEmailInvitation: true,
