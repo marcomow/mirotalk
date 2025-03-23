@@ -92,7 +92,7 @@ module.exports = {
      */
     buttons: {
         main: {
-            showShareRoomBtn: true, // For guests
+            showShareRoomBtn: false, // For guests
             showHideMeBtn: true,
             showAudioBtn: true,
             showVideoBtn: true,
@@ -128,13 +128,13 @@ module.exports = {
             showTabRoomPeerName: false,
             showTabRoomParticipants: true,
             showTabRoomSecurity: true,
-            showTabEmailInvitation: true,
+            showTabEmailInvitation: false,
             showCaptionEveryoneBtn: true,
             showMuteEveryoneBtn: true,
             showHideEveryoneBtn: true,
             showEjectEveryoneBtn: true,
-            showLockRoomBtn: true,
-            showUnlockRoomBtn: true,
+            showLockRoomBtn: false,
+            showUnlockRoomBtn: false,
             showShortcutsBtn: true,
         },
         remote: {
