@@ -20,4 +20,15 @@ window.addEventListener("message", (event) => {
             peer_nickname: myPeerNickname,
         });
     }
+    const isChangeLanguageEvent = event.data.type === "changeLanguage";
+    if (isChangeLanguageEvent) {
+        const tryInterval = setInterval(() => {
+            try {
+                setLanguage(event.data.language);
+                clearInterval(tryInterval);
+            } catch (err) {
+                console.error(err);
+            }
+        }, 1000);
+    }
 });
