@@ -592,7 +592,7 @@ let myVideoStatusIcon;
 let myAudioStatusIcon;
 let isVideoPrivacyActive = false; // Video circle for privacy
 let isVideoPinned = false;
-let isVideoFullScreenSupported = true;
+let isVideoFullScreenSupported = false;
 let isVideoOnFullScreen = false;
 let isScreenSharingSupported = false;
 let isScreenStreaming = false;

@@ -93,7 +93,7 @@ module.exports = {
     buttons: {
         main: {
             showShareRoomBtn: false, // For guests
-            showHideMeBtn: true,
+            showHideMeBtn: false,
             showAudioBtn: true,
             showVideoBtn: true,
             showScreenBtn: true, // autodetected
@@ -132,7 +132,7 @@ module.exports = {
             showCaptionEveryoneBtn: true,
             showMuteEveryoneBtn: true,
             showHideEveryoneBtn: true,
-            showEjectEveryoneBtn: true,
+            showEjectEveryoneBtn: false,
             showLockRoomBtn: false,
             showUnlockRoomBtn: false,
             showShortcutsBtn: true,
@@ -142,7 +142,7 @@ module.exports = {
             audioBtnClickAllowed: true,
             videoBtnClickAllowed: true,
             showVideoPipBtn: true,
-            showKickOutBtn: true,
+            showKickOutBtn: false,
             showSnapShotBtn: true,
             showFileShareBtn: true,
             showShareVideoAudioBtn: true,
