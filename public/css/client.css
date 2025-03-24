@@ -23,8 +23,8 @@
     --caption-width: 420px;
 
     /* video iframe */
-    --iframe-width: 640px;
-    --iframe-height: 480px;
+    --iframe-width: 200px;
+    --iframe-height: 200px;
 
     /* whiteboard resize */
     --wb-width: 800px;
