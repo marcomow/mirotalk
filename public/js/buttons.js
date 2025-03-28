@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Configuration for controlling the visibility of buttons in the MiroTalk P2P client.
@@ -43,7 +43,7 @@ let buttons = {
         showTabRoomPeerName: false,
         showTabRoomParticipants: true,
         showTabRoomSecurity: true,
-        showTabEmailInvitation: true,
+        showTabEmailInvitation: false,
         showCaptionEveryoneBtn: true,
         showMuteEveryoneBtn: true,
         showHideEveryoneBtn: true,

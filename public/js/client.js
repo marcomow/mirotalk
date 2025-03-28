@@ -1398,11 +1398,11 @@ function handleRules(isPresenter) {
         buttons.whiteboard.whiteboardLockBtn = false;
         //...
     } else {
-        buttons.main.showShareRoomBtn = true;
+        buttons.main.showShareRoomBtn = false;
         buttons.settings.showMicOptionsBtn = true;
         buttons.settings.showTabRoomParticipants = true;
         buttons.settings.showTabRoomSecurity = true;
-        buttons.settings.showTabEmailInvitation = true;
+        buttons.settings.showTabEmailInvitation = false;
         buttons.settings.showLockRoomBtn = !isRoomLocked;
         buttons.settings.showUnlockRoomBtn = isRoomLocked;
         buttons.remote.audioBtnClickAllowed = true;
