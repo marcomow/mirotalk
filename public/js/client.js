@@ -9932,7 +9932,9 @@ function handleEmoji(message, duration = 5000) {
         emojiDisplay.style.backgroundColor = "rgba(0, 0, 0, 0.2)";
         emojiDisplay.style.borderRadius = "10px";
         emojiDisplay.style.marginBottom = "5px";
-        emojiDisplay.innerText = `${message.emoji} ${message.peer_name}`;
+        emojiDisplay.innerText = `${message.emoji} ${
+            message.peer_nickname || message.peer_name
+        }`;
         userEmoji.appendChild(emojiDisplay);
 
         setTimeout(() => {
