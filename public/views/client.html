@@ -1,11 +1,17 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <!-- Title and Icon -->
 
-        <title id="clientTitle">MiroTalk WebRTC Video call, Chat Room & Screen Sharing.</title>
+        <title id="clientTitle">
+            MiroTalk WebRTC Video call, Chat Room & Screen Sharing.
+        </title>
         <link id="icon" rel="shortcut icon" href="../images/logo.svg" />
-        <link id="appleTouchIcon" rel="apple-touch-icon" href="../images/logo.svg" />
+        <link
+            id="appleTouchIcon"
+            rel="apple-touch-icon"
+            href="../images/logo.svg"
+        />
 
         <!-- Meta Information -->
 
@@ -32,7 +38,12 @@
         <meta property="og:image" content="{{OG_IMAGE}}" />
         <meta property="og:url" content="{{OG_URL}}" />
 
-        <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon.png" />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../images/favicon.png"
+        />
 
         <!-- StyleSheet -->
 
@@ -42,25 +53,46 @@
 
         <!-- https://cdnjs.com/libraries/font-awesome -->
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        />
 
         <!-- https://animate.style 4 using for swal fadeIn-Out -->
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        />
 
         <!-- flatpickr  https://flatpickr.js.org/themes/ -->
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-        <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css"
+        />
 
         <!--  pickr  https://github.com/simonwep/pickr -->
 
         <!-- 'classic' theme -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"
+        />
         <!-- 'monolith' theme -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/monolith.min.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/monolith.min.css"
+        />
         <!-- 'nano' theme -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"
+        />
 
         <!-- Highlight  https://github.com/highlightjs/highlight.js -->
 
@@ -88,10 +120,12 @@
         <div id="loadingDiv" class="center pulsate">
             <h1>Loading</h1>
             <img class="loading-img" src="../images/loading.gif" />
-            <pre>
+            <pre
+            >
 Please allow the camera or microphone
 access to use this app.
-            </pre>
+            </pre
+            >
         </div>
 
         <!-- init user devices -->
@@ -105,23 +139,42 @@ access to use this app.
                     autoplay=""
                     class="mirror"
                     poster="../images/loader.gif"
-                ></video>
+                >
+                </video>
             </div>
             <div class="initComands">
                 <button id="initVideoBtn" class="fas fa-video"></button>
                 <button id="initAudioBtn" class="fas fa-microphone"></button>
                 <button id="initScreenShareBtn" class="fas fa-desktop"></button>
-                <button id="initVideoMirrorBtn" class="fas fa-arrow-right-arrow-left"></button>
-                <button id="initUsernameEmojiButton" class="fas fa-smile"></button>
-                <select id="initVideoSelect" class="form-select text-light bg-dark"></select>
-                <select id="initMicrophoneSelect" class="form-select text-light bg-dark"></select>
-                <select id="initSpeakerSelect" class="form-select text-light bg-dark"></select>
+                <button
+                    id="initVideoMirrorBtn"
+                    class="fas fa-arrow-right-arrow-left"
+                >
+                </button>
+                <button id="initUsernameEmojiButton" class="fas fa-smile">
+                </button>
+                <select
+                    id="initVideoSelect"
+                    class="form-select text-light bg-dark"
+                >
+                </select>
+                <select
+                    id="initMicrophoneSelect"
+                    class="form-select text-light bg-dark"
+                >
+                </select>
+                <select
+                    id="initSpeakerSelect"
+                    class="form-select text-light bg-dark"
+                >
+                </select>
             </div>
         </div>
 
         <!-- Add emoji to username -->
 
-        <div id="usernameEmoji" class="usernameEmoji fadein center hidden"></div>
+        <div id="usernameEmoji" class="usernameEmoji fadein center hidden">
+        </div>
 
         <!-- Start buttons bar https://fontawesome.com/icons?d=gallery -->
 
@@ -132,8 +185,10 @@ access to use this app.
             <button id="fullScreenBtn" class="fas fa-expand-alt"></button>
             <button id="roomEmojiPickerBtn" class="fas fa-face-smile"></button>
             <button id="captionBtn" class="fas fa-closed-captioning"></button>
-            <button id="whiteboardBtn" class="fas fa-chalkboard-teacher"></button>
-            <button id="snapshotRoomBtn" class="fas fas fa-camera-retro"></button>
+            <button id="whiteboardBtn" class="fas fa-chalkboard-teacher">
+            </button>
+            <button id="snapshotRoomBtn" class="fas fas fa-camera-retro">
+            </button>
             <button id="fileShareBtn" class="fas fa-folder-open"></button>
             <button id="documentPiPBtn" class="fas fa-images"></button>
             <button id="aboutBtn" class="fas fa-question"></button>
@@ -159,7 +214,8 @@ access to use this app.
 
         <div id="emojiPickerContainer" class="roomEmoji fadein">
             <div id="emojiPickerHeader" class="emojiPickerHeader">
-                <button id="closeEmojiPickerContainer" class="fas fa-times"></button>
+                <button id="closeEmojiPickerContainer" class="fas fa-times">
+                </button>
             </div>
         </div>
         <div id="userEmoji" class="userEmoji"></div>
@@ -176,10 +232,12 @@ access to use this app.
                 <header id="msgerHeader" class="msger-header">
                     <div class="msger-header-title"></div>
                     <div class="msger-header-options">
-                        <button id="msgerTogglePin" class="fas fa-map-pin"></button>
+                        <button id="msgerTogglePin" class="fas fa-map-pin">
+                        </button>
                         <button id="msgerTheme" class="fas fa-ghost"></button>
                         <button id="msgerMaxBtn" class="fas fa-expand"></button>
-                        <button id="msgerMinBtn" class="fas fa-compress"></button>
+                        <button id="msgerMinBtn" class="fas fa-compress">
+                        </button>
                         <div class="dropdown-custom">
                             <button
                                 class="dropdown-toggle-custom"
@@ -197,27 +255,43 @@ access to use this app.
                             >
                                 <li>
                                     <hr />
-                                    <div id="msgerShowChatOnMsgDiv" class="title ml-10">
+                                    <div
+                                        id="msgerShowChatOnMsgDiv"
+                                        class="title ml-10"
+                                    >
                                         <i class="fa-solid fa-eye"></i>
                                         <label class="switch ml-10">
-                                            <input id="msgerShowChatOnMsg" type="checkbox" checked />
+                                            <input
+                                                id="msgerShowChatOnMsg"
+                                                type="checkbox"
+                                                checked
+                                            />
                                             <span class="slider round"></span>
                                         </label>
                                     </div>
                                     <div id="msgerSpeechMsgDiv" class="title">
                                         <i class="fas fa-volume-high ml-10"></i>
                                         <label class="switch ml-10">
-                                            <input id="msgerSpeechMsg" type="checkbox" />
+                                            <input
+                                                id="msgerSpeechMsg"
+                                                type="checkbox"
+                                            />
                                             <span class="slider round"></span>
                                         </label>
                                     </div>
                                     <hr />
                                 </li>
                                 <li>
-                                    <button id="msgerSaveBtn"><i class="fas fa-save"></i> Save messages</button>
+                                    <button id="msgerSaveBtn">
+                                        <i class="fas fa-save"></i> Save
+                                        messages
+                                    </button>
                                 </li>
                                 <li>
-                                    <button id="msgerClean"><i class="fas fa-trash"></i> Clean messages</button>
+                                    <button id="msgerClean">
+                                        <i class="fas fa-trash"></i> Clean
+                                        messages
+                                    </button>
                                 </li>
                             </ul>
                         </div>
@@ -229,7 +303,11 @@ access to use this app.
 
                 <!-- Start emoji picker -->
 
-                <section id="msgerEmojiPicker" class="hidden fadein chatEmojiPicker"></section>
+                <section
+                    id="msgerEmojiPicker"
+                    class="hidden fadein chatEmojiPicker"
+                >
+                </section>
 
                 <!-- End emoji picker -->
 
@@ -245,14 +323,19 @@ access to use this app.
 
                 <div class="msger-input-buttons">
                     <button id="msgerEmojiBtn" class="fas fa-smile"></button>
-                    <button id="msgerMarkdownBtn" class="fab fa-markdown"></button>
+                    <button id="msgerMarkdownBtn" class="fab fa-markdown">
+                    </button>
                     <button id="msgerGPTBtn" class="fas fa-robot"></button>
-                    <button id="msgerShareFileBtn" class="fas fa-paperclip"></button>
-                    <button id="msgerVideoUrlBtn" class="fab fa-youtube"></button>
+                    <button id="msgerShareFileBtn" class="fas fa-paperclip">
+                    </button>
+                    <button id="msgerVideoUrlBtn" class="fab fa-youtube">
+                    </button>
                     <button id="msgerCPBtn" class="fas fa-users"></button>
-                    <button id="msgerCleanTextBtn" class="fas fa-trash"></button>
+                    <button id="msgerCleanTextBtn" class="fas fa-trash">
+                    </button>
                     <button id="msgerPasteBtn" class="fas fa-paste"></button>
-                    <button id="msgerSendBtn" class="fas fa-paper-plane"></button>
+                    <button id="msgerSendBtn" class="fas fa-paper-plane">
+                    </button>
                 </div>
             </section>
 
@@ -261,9 +344,13 @@ access to use this app.
             <section id="msgerCP" class="center fadein">
                 <section id="msgerCPSec" class="msger">
                     <header id="msgerCPHeader" class="msger-private-header">
-                        <div class="msger-header-title"><i class="fas fa-comment-alt"></i> Send Private messages</div>
+                        <div class="msger-header-title">
+                            <i class="fas fa-comment-alt"></i> Send Private
+                            messages
+                        </div>
                         <div class="msger-header-options">
-                            <button id="msgerCPCloseBtn" class="fas fa-times"></button>
+                            <button id="msgerCPCloseBtn" class="fas fa-times">
+                            </button>
                         </div>
                     </header>
                     <main id="msgerCPChat" class="msger-chat">
@@ -293,14 +380,22 @@ access to use this app.
             <section id="caption" class="caption">
                 <header id="captionHeader" class="caption-header">
                     <div class="caption-header-title">
-                        <button id="speechRecognitionIcon" class="fas fa-microphone-alt"></button>
+                        <button
+                            id="speechRecognitionIcon"
+                            class="fas fa-microphone-alt"
+                        >
+                        </button>
                     </div>
                     <div class="caption-header-options">
-                        <button id="captionTogglePin" class="fas fa-map-pin"></button>
-                        <button id="captionMaxBtn" class="fas fa-expand"></button>
-                        <button id="captionMinBtn" class="fas fa-compress"></button>
+                        <button id="captionTogglePin" class="fas fa-map-pin">
+                        </button>
+                        <button id="captionMaxBtn" class="fas fa-expand">
+                        </button>
+                        <button id="captionMinBtn" class="fas fa-compress">
+                        </button>
                         <button id="captionTheme" class="fas fa-ghost"></button>
-                        <button id="captionSaveBtn" class="fas fa-save"></button>
+                        <button id="captionSaveBtn" class="fas fa-save">
+                        </button>
                         <button id="captionClean" class="fas fa-trash"></button>
                         <button id="captionClose" class="fas fa-times"></button>
                     </div>
@@ -310,8 +405,12 @@ access to use this app.
                 <div id="captionFooter" class="caption-inputarea">
                     <select id="recognitionLanguage"></select>
                     <select id="recognitionDialect"></select>
-                    <button id="speechRecognitionStart"><i class="fas fa-play"></i> Start</button>
-                    <button id="speechRecognitionStop"><i class="fas fa-stop"></i> Stop</button>
+                    <button id="speechRecognitionStart">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                    <button id="speechRecognitionStop">
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
                 </div>
             </section>
         </section>
@@ -335,22 +434,40 @@ access to use this app.
                     <button id="tabAudioBtn" class="fas fa-microphone tablinks">
                         <p class="tabButtonText">Audio</p>
                     </button>
-                    <button id="tabRecordingBtn" class="fas fa-record-vinyl tablinks">
+                    <button
+                        id="tabRecordingBtn"
+                        class="fas fa-record-vinyl tablinks"
+                    >
                         <p class="tabButtonText">Recording</p>
                     </button>
-                    <button id="tabVideoShareBtn" class="fab fa-youtube tablinks">
+                    <button
+                        id="tabVideoShareBtn"
+                        class="fab fa-youtube tablinks"
+                    >
                         <p class="tabButtonText">Media</p>
                     </button>
-                    <button id="tabParticipantsBtn" class="fa-solid fa-users tablinks">
+                    <button
+                        id="tabParticipantsBtn"
+                        class="fa-solid fa-users tablinks"
+                    >
                         <p class="tabButtonText">Participants</p>
                     </button>
-                    <button id="tabProfileBtn" class="fa-solid fa-user tablinks">
+                    <button
+                        id="tabProfileBtn"
+                        class="fa-solid fa-user tablinks"
+                    >
                         <p class="tabButtonText">Profile</p>
                     </button>
-                    <button id="tabShortcutsBtn" class="fas fa-keyboard tablinks">
+                    <button
+                        id="tabShortcutsBtn"
+                        class="fas fa-keyboard tablinks"
+                    >
                         <p class="tabButtonText">Shortcuts</p>
                     </button>
-                    <button id="tabNetworkBtn" class="fa-solid fa-network-wired tablinks">
+                    <button
+                        id="tabNetworkBtn"
+                        class="fa-solid fa-network-wired tablinks"
+                    >
                         <p class="tabButtonText">Network</p>
                     </button>
                     <button id="tabStylingBtn" class="fas fa-palette tablinks">
@@ -367,15 +484,20 @@ access to use this app.
                             <tr>
                                 <td>
                                     <div class="title">
-                                        <i class="fa-solid fa-person-shelter"></i>
-                                        <p id="myRoomId" class="cp">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</p>
+                                        <i
+                                            class="fa-solid fa-person-shelter"
+                                        ></i>
+                                        <p id="myRoomId" class="cp">
+                                            xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                                        </p>
                                     </div>
                                 </td>
                             </tr>
                         </table>
                         <div id="tabRoomSecurity">
                             <button id="lockRoomBtn" class="orange">
-                                <i class="fas fa-lock-open orange"></i>&nbsp;Lock room
+                                <i class="fas fa-lock-open orange"></i
+                                >&nbsp;Lock room
                             </button>
                             <button id="unlockRoomBtn" class="red">
                                 <i class="fas fa-lock red"></i>&nbsp;Unlock room
@@ -384,7 +506,8 @@ access to use this app.
                         </div>
                         <div id="tabEmailInvitation">
                             <button id="roomSendEmailBtn">
-                                <i class="fas fa-envelope-circle-check"></i>&nbsp;Send email invitation
+                                <i class="fas fa-envelope-circle-check"></i
+                                >&nbsp;Send email invitation
                                 <br />
                             </button>
                         </div>
@@ -398,7 +521,14 @@ access to use this app.
                                         <p>Volume bar</p>
                                     </div>
                                 </td>
-                                <td><input id="switchAudioPitchBar" class="toggle" type="checkbox" checked /></td>
+                                <td>
+                                    <input
+                                        id="switchAudioPitchBar"
+                                        class="toggle"
+                                        type="checkbox"
+                                        checked
+                                    />
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -407,16 +537,30 @@ access to use this app.
                                         <p>Sounds</p>
                                     </div>
                                 </td>
-                                <td><input id="switchSounds" class="toggle" type="checkbox" checked /></td>
+                                <td>
+                                    <input
+                                        id="switchSounds"
+                                        class="toggle"
+                                        type="checkbox"
+                                        checked
+                                    />
+                                </td>
                             </tr>
-                            <tr id="shareOnJoinButton">
+                            <tr id="shareOnJoinButton" style="display: none">
                                 <td>
                                     <div class="title">
                                         <i class="fas fa-share-alt"></i>
                                         <p>Share</p>
                                     </div>
                                 </td>
-                                <td><input id="switchShare" class="toggle" type="checkbox" checked /></td>
+                                <td>
+                                    <input
+                                        id="switchShare"
+                                        class="toggle"
+                                        type="checkbox"
+                                        checked
+                                    />
+                                </td>
                             </tr>
                             <tr id="keepButtonsVisibleButton">
                                 <td>
@@ -425,7 +569,13 @@ access to use this app.
                                         <p>Buttons</p>
                                     </div>
                                 </td>
-                                <td><input id="switchKeepButtonsVisible" class="toggle" type="checkbox" /></td>
+                                <td>
+                                    <input
+                                        id="switchKeepButtonsVisible"
+                                        class="toggle"
+                                        type="checkbox"
+                                    />
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -477,9 +627,15 @@ access to use this app.
                             </div>
                             <br />
                             <select id="videoFps">
-                                <option value="60">60 - frame-per-second</option>
-                                <option value="30">30 - frame-per-second</option>
-                                <option value="15">15 - frame-per-second</option>
+                                <option value="60">
+                                    60 - frame-per-second
+                                </option>
+                                <option value="30">
+                                    30 - frame-per-second
+                                </option>
+                                <option value="15">
+                                    15 - frame-per-second
+                                </option>
                                 <option value="5">5 - frame-per-second</option>
                             </select>
                         </div>
@@ -491,9 +647,15 @@ access to use this app.
                             </div>
                             <br />
                             <select id="screenFps">
-                                <option value="60">60 - frame-per-second</option>
-                                <option value="30">30 - frame-per-second</option>
-                                <option value="15">15 - frame-per-second</option>
+                                <option value="60">
+                                    60 - frame-per-second
+                                </option>
+                                <option value="30">
+                                    30 - frame-per-second
+                                </option>
+                                <option value="15">
+                                    15 - frame-per-second
+                                </option>
                                 <option value="5">5 - frame-per-second</option>
                             </select>
                         </div>
@@ -523,13 +685,25 @@ access to use this app.
                         </div>
                         <br />
                         <div class="dropdown" id="dropDownMicOptions">
-                            <button class="buttons" id="micOptionsBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button
+                                class="buttons"
+                                id="micOptionsBtn"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
                                 <i class="fas fa-screwdriver-wrench"></i>
                                 <p>Advance options</p>
                                 <i class="fas fa-caret-down"></i>
                             </button>
-                            <br /><br /><br /><br />
-                            <div id="micDropDownMenu" class="dropdown-menu" aria-labelledby="micOptionsBtn">
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <div
+                                id="micDropDownMenu"
+                                class="dropdown-menu"
+                                aria-labelledby="micOptionsBtn"
+                            >
                                 <table class="mySettingsTable">
                                     <tr id="autoGainControlButton">
                                         <td class="microphone-table-width">
@@ -538,7 +712,13 @@ access to use this app.
                                                 <p>Auto gain control</p>
                                             </div>
                                         </td>
-                                        <td><input class="toggle" id="switchAutoGainControl" type="checkbox" /></td>
+                                        <td>
+                                            <input
+                                                class="toggle"
+                                                id="switchAutoGainControl"
+                                                type="checkbox"
+                                            />
+                                        </td>
                                     </tr>
                                     <tr id="echoCancellationButton">
                                         <td class="microphone-table-width">
@@ -548,7 +728,12 @@ access to use this app.
                                             </div>
                                         </td>
                                         <td>
-                                            <input class="toggle" id="switchEchoCancellation" type="checkbox" checked />
+                                            <input
+                                                class="toggle"
+                                                id="switchEchoCancellation"
+                                                type="checkbox"
+                                                checked
+                                            />
                                         </td>
                                     </tr>
                                     <tr id="noiseSuppressionButton">
@@ -559,7 +744,12 @@ access to use this app.
                                             </div>
                                         </td>
                                         <td>
-                                            <input class="toggle" id="switchNoiseSuppression" type="checkbox" checked />
+                                            <input
+                                                class="toggle"
+                                                id="switchNoiseSuppression"
+                                                type="checkbox"
+                                                checked
+                                            />
                                         </td>
                                     </tr>
                                     <tr id="micLatencyButton">
@@ -581,7 +771,10 @@ access to use this app.
                                                     value="50"
                                                     step="10"
                                                 />
-                                                <p><span id="micLatencyValue">50</span>&nbsp;ms</p>
+                                                <p>
+                                                    <span id="micLatencyValue"
+                                                    >50</span>&nbsp;ms
+                                                </p>
                                             </div>
                                         </td>
                                     </tr>
@@ -604,7 +797,10 @@ access to use this app.
                                                     value="100"
                                                     step="10"
                                                 />
-                                                <p><span id="micVolumeValue">100</span>&nbsp;%</p>
+                                                <p>
+                                                    <span id="micVolumeValue"
+                                                    >100</span>&nbsp;%
+                                                </p>
                                             </div>
                                         </td>
                                     </tr>
@@ -617,8 +813,12 @@ access to use this app.
                                         </td>
                                         <td>
                                             <select id="sampleRateSelect">
-                                                <option value="48000">48000 Hz</option>
-                                                <option value="44100">44100 Hz</option>
+                                                <option value="48000">
+                                                    48000 Hz
+                                                </option>
+                                                <option value="44100">
+                                                    44100 Hz
+                                                </option>
                                             </select>
                                         </td>
                                     </tr>
@@ -631,8 +831,12 @@ access to use this app.
                                         </td>
                                         <td>
                                             <select id="sampleSizeSelect">
-                                                <option value="16">16 bits</option>
-                                                <option value="32">32 bits</option>
+                                                <option value="16">
+                                                    16 bits
+                                                </option>
+                                                <option value="32">
+                                                    32 bits
+                                                </option>
                                             </select>
                                         </td>
                                     </tr>
@@ -645,14 +849,21 @@ access to use this app.
                                         </td>
                                         <td>
                                             <select id="channelCountSelect">
-                                                <option value="1">1 (mono)</option>
-                                                <option value="2">2 (stereo)</option>
+                                                <option value="1">
+                                                    1 (mono)
+                                                </option>
+                                                <option value="2">
+                                                    2 (stereo)
+                                                </option>
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <button id="applyAudioOptionsBtn" class="fas fa-check">
+                                            <button
+                                                id="applyAudioOptionsBtn"
+                                                class="fas fa-check"
+                                            >
                                                 <p>Apply options</p>
                                             </button>
                                         </td>
@@ -671,7 +882,11 @@ access to use this app.
                                 <i class="fa-solid fa-circle-play"></i>
                                 <p>Test speaker</p>
                             </button>
-                            <br /><br /><br /><br /><br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
                         </div>
                         <table id="mySettingsTable">
                             <tr id="pushToTalkDiv">
@@ -681,7 +896,13 @@ access to use this app.
                                         <p>Push to talk</p>
                                     </div>
                                 </td>
-                                <td><input id="switchPushToTalk" class="toggle" type="checkbox" /></td>
+                                <td>
+                                    <input
+                                        id="switchPushToTalk"
+                                        class="toggle"
+                                        type="checkbox"
+                                    />
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -697,13 +918,22 @@ access to use this app.
                                             <p>Prioritize H.264</p>
                                         </div>
                                     </td>
-                                    <td><input class="toggle" id="switchH264Recording" type="checkbox" /></td>
+                                    <td>
+                                        <input
+                                            class="toggle"
+                                            id="switchH264Recording"
+                                            type="checkbox"
+                                        />
+                                    </td>
                                 </tr>
                             </table>
                             <hr class="hr" />
                         </div>
                         <div class="trow">
-                            <span class="clw notranslate" id="recordingTime"></span>
+                            <span
+                                class="clw notranslate"
+                                id="recordingTime"
+                            ></span>
                             <br />
                             <button id="pauseRecBtn" class="buttons">
                                 <i class="far fa-pause-circle"></i>
@@ -732,11 +962,19 @@ access to use this app.
                         <br />
                         <div id="tabRoomParticipants">
                             <br />
-                            <button id="captionEveryoneBtn"><i class="fas fa-play"></i>&nbsp;Start captions</button>
-                            <button id="muteEveryoneBtn"><i class="fas fa-microphone"></i>&nbsp;Mute everyone</button>
-                            <button id="hideEveryoneBtn"><i class="fas fa-video"></i>&nbsp;Hide everyone</button>
+                            <button id="captionEveryoneBtn">
+                                <i class="fas fa-play"></i>&nbsp;Start captions
+                            </button>
+                            <button id="muteEveryoneBtn">
+                                <i class="fas fa-microphone"></i>&nbsp;Mute
+                                everyone
+                            </button>
+                            <button id="hideEveryoneBtn">
+                                <i class="fas fa-video"></i>&nbsp;Hide everyone
+                            </button>
                             <button id="ejectEveryoneBtn">
-                                <i class="fas fa-right-from-bracket"></i>&nbsp;Eject everyone
+                                <i class="fas fa-right-from-bracket"></i
+                                >&nbsp;Eject everyone
                             </button>
                         </div>
                     </div>
@@ -750,7 +988,13 @@ access to use this app.
                                         <p>Keyboard shortcuts</p>
                                     </div>
                                 </td>
-                                <td><input class="toggle" id="switchShortcuts" type="checkbox" /></td>
+                                <td>
+                                    <input
+                                        class="toggle"
+                                        id="switchShortcuts"
+                                        type="checkbox"
+                                    />
+                                </td>
                             </tr>
                         </table>
                         <div>
@@ -765,8 +1009,12 @@ access to use this app.
                                 <tbody>
                                     <tr>
                                         <td><i class="fa-solid fa-a"></i></td>
-                                        <td><i class="fas fa-microphone"></i></td>
-                                        <td><strong>Toggle</strong> microphone</td>
+                                        <td>
+                                            <i class="fas fa-microphone"></i>
+                                        </td>
+                                        <td>
+                                            <strong>Toggle</strong> microphone
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-v"></i></td>
@@ -780,8 +1028,12 @@ access to use this app.
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-h"></i></td>
-                                        <td><i class="fas fa-hand-paper"></i></td>
-                                        <td><strong>Toggle</strong> raise hand</td>
+                                        <td>
+                                            <i class="fas fa-hand-paper"></i>
+                                        </td>
+                                        <td>
+                                            <strong>Toggle</strong> raise hand
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-c"></i></td>
@@ -791,46 +1043,79 @@ access to use this app.
                                     <tr>
                                         <td><i class="fa-solid fa-o"></i></td>
                                         <td><i class="fas fa-cogs"></i></td>
-                                        <td><strong>Toggle</strong> settings</td>
+                                        <td>
+                                            <strong>Toggle</strong> settings
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-x"></i></td>
                                         <td><i class="fas fa-user"></i></td>
-                                        <td><strong>Toggle</strong> hide myself</td>
+                                        <td>
+                                            <strong>Toggle</strong> hide myself
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-r"></i></td>
-                                        <td><i class="fas fa-record-vinyl"></i></td>
-                                        <td><strong>Toggle</strong> recording</td>
+                                        <td>
+                                            <i class="fas fa-record-vinyl"></i>
+                                        </td>
+                                        <td>
+                                            <strong>Toggle</strong> recording
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-e"></i></td>
-                                        <td><i class="fas fa-face-smile"></i></td>
+                                        <td>
+                                            <i class="fas fa-face-smile"></i>
+                                        </td>
                                         <td><strong>Toggle</strong> emoji</td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-k"></i></td>
-                                        <td><i class="fas fa-closed-captioning"></i></td>
-                                        <td><strong>Toggle</strong> captions</td>
+                                        <td>
+                                            <i
+                                                class="fas fa-closed-captioning"
+                                            ></i>
+                                        </td>
+                                        <td>
+                                            <strong>Toggle</strong> captions
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-w"></i></td>
-                                        <td><i class="fas fa-chalkboard-teacher"></i></td>
-                                        <td><strong>Toggle</strong> whiteboard</td>
+                                        <td>
+                                            <i
+                                                class="fas fa-chalkboard-teacher"
+                                            ></i>
+                                        </td>
+                                        <td>
+                                            <strong>Toggle</strong> whiteboard
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-d"></i></td>
                                         <td><i class="fas fa-images"></i></td>
-                                        <td><strong>Toggle</strong> document PIP</td>
+                                        <td>
+                                            <strong>Toggle</strong> document PIP
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-t"></i></td>
-                                        <td><i class="fas fas fa-camera-retro"></i></td>
-                                        <td><strong>Snapshot</strong> screen/window/tab</td>
+                                        <td>
+                                            <i
+                                                class="fas fas fa-camera-retro"
+                                            ></i>
+                                        </td>
+                                        <td>
+                                            <strong>Snapshot</strong>
+                                            screen/window/tab
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><i class="fa-solid fa-f"></i></td>
-                                        <td><i class="fas fa-folder-open"></i></td>
+                                        <td>
+                                            <i class="fas fa-folder-open"></i>
+                                        </td>
                                         <td><strong>Share</strong> the file</td>
                                     </tr>
                                 </tbody>
@@ -848,10 +1133,19 @@ access to use this app.
                                 <i class="fas fa-user"></i>
                                 <p>Name</p>
                             </div>
-                            <br /><br />
+                            <br />
+                            <br />
                             <div>
-                                <input id="myPeerNameSet" type="text" placeholder="Change name..." maxlength="32" />
-                                <button id="myPeerNameSetBtn"><i class="fas fa-user-edit"></i>&nbsp;Change name</button>
+                                <input
+                                    id="myPeerNameSet"
+                                    type="text"
+                                    placeholder="Change name..."
+                                    maxlength="32"
+                                />
+                                <button id="myPeerNameSetBtn">
+                                    <i class="fas fa-user-edit"></i>&nbsp;Change
+                                    name
+                                </button>
                             </div>
                         </div>
                         <br />
@@ -860,7 +1154,8 @@ access to use this app.
                             <p>Presenter:</p>
                             <p id="isPeerPresenter">true</p>
                         </div>
-                        <br /><br />
+                        <br />
+                        <br />
                         <div class="title">
                             <i class="fa-solid fa-circle-info"></i>
                             <p>Extra info:</p>
@@ -899,7 +1194,7 @@ access to use this app.
                                 </td>
                                 <td><p id="networkStun">🔴</p></td>
                             </tr>
-                            <tr id="shareOnJoinButton">
+                            <tr id="shareOnJoinButton" style="display: none">
                                 <td>
                                     <div class="title">
                                         <i class="fa-solid fa-tower-cell"></i>
@@ -934,7 +1229,11 @@ access to use this app.
                             <p>Custom theme</p>
                         </div>
                         <br />
-                        <input id="themeColorPicker" class="theme-color-picker" type="text" />
+                        <input
+                            id="themeColorPicker"
+                            class="theme-color-picker"
+                            type="text"
+                        />
                         <br />
                         <div class="inline-check-box">
                             <div>
@@ -943,7 +1242,11 @@ access to use this app.
                                     <p>Keep custom</p>
                                 </div>
                             </div>
-                            <input id="keepCustomTheme" class="toggle" type="checkbox" />
+                            <input
+                                id="keepCustomTheme"
+                                class="toggle"
+                                type="checkbox"
+                            />
                         </div>
                         <br />
                         <div class="title">
@@ -991,16 +1294,41 @@ access to use this app.
         <section id="whiteboard" class="hidden">
             <header id="whiteboardHeader" class="whiteboard-header">
                 <div id="whiteboardTitle" class="whiteboard-header-title">
-                    <button id="whiteboardCloseBtn" class="fas fa-times"></button>
-                    <button id="whiteboardLockBtn" class="fa-solid fa-lock-open"></button>
-                    <button id="whiteboardUnlockBtn" class="fa-solid fa-lock"></button>
+                    <button id="whiteboardCloseBtn" class="fas fa-times">
+                    </button>
+                    <button
+                        id="whiteboardLockBtn"
+                        class="fa-solid fa-lock-open"
+                    >
+                    </button>
+                    <button id="whiteboardUnlockBtn" class="fa-solid fa-lock">
+                    </button>
                 </div>
                 <div id="whiteboardOptions" class="whiteboard-header-options">
-                    <button id="whiteboardGhostButton" class="fas fa-circle-half-stroke"></button>
-                    <input id="wbBackgroundColorEl" class="whiteboardColorPicker" type="color" value="#000000" />
-                    <input id="wbDrawingColorEl" class="whiteboardColorPicker" type="color" value="#FFFFFF" />
-                    <button id="whiteboardPencilBtn" class="fas fa-pencil-alt"></button>
-                    <button id="whiteboardObjectBtn" class="fas fa-mouse-pointer"></button>
+                    <button
+                        id="whiteboardGhostButton"
+                        class="fas fa-circle-half-stroke"
+                    >
+                    </button>
+                    <input
+                        id="wbBackgroundColorEl"
+                        class="whiteboardColorPicker"
+                        type="color"
+                        value="#000000"
+                    />
+                    <input
+                        id="wbDrawingColorEl"
+                        class="whiteboardColorPicker"
+                        type="color"
+                        value="#FFFFFF"
+                    />
+                    <button id="whiteboardPencilBtn" class="fas fa-pencil-alt">
+                    </button>
+                    <button
+                        id="whiteboardObjectBtn"
+                        class="fas fa-mouse-pointer"
+                    >
+                    </button>
                     <button id="whiteboardUndoBtn" class="fas fa-undo"></button>
                     <button id="whiteboardRedoBtn" class="fas fa-redo"></button>
                     <div class="whiteboard-dropdown">
@@ -1018,12 +1346,24 @@ access to use this app.
                             class="whiteboard-dropdown-menu"
                             aria-labelledby="whiteboardDropDownMenu"
                         >
-                            <button id="whiteboardImgFileBtn"><i class="far fa-image"></i> Add image file</button>
-                            <button id="whiteboardImgUrlBtn"><i class="fas fa-link"></i> Add image URL</button>
-                            <button id="whiteboardPdfFileBtn"><i class="far fa-file-pdf"></i> Add pdf file</button>
-                            <button id="whiteboardTextBtn"><i class="fas fa-spell-check"></i> Add text</button>
-                            <button id="whiteboardLineBtn"><i class="fas fa-slash"></i> Add line</button>
-                            <button id="whiteboardRectBtn"><i class="far fa-square"></i> Add rectangle</button>
+                            <button id="whiteboardImgFileBtn">
+                                <i class="far fa-image"></i> Add image file
+                            </button>
+                            <button id="whiteboardImgUrlBtn">
+                                <i class="fas fa-link"></i> Add image URL
+                            </button>
+                            <button id="whiteboardPdfFileBtn">
+                                <i class="far fa-file-pdf"></i> Add pdf file
+                            </button>
+                            <button id="whiteboardTextBtn">
+                                <i class="fas fa-spell-check"></i> Add text
+                            </button>
+                            <button id="whiteboardLineBtn">
+                                <i class="fas fa-slash"></i> Add line
+                            </button>
+                            <button id="whiteboardRectBtn">
+                                <i class="far fa-square"></i> Add rectangle
+                            </button>
                             <button id="whiteboardTriangleBtn">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -1032,14 +1372,24 @@ access to use this app.
                                     viewBox="0 0 24 24"
                                     fill="#FFFFFF"
                                 >
-                                    <path d="M12 5.887l8.468 14.113h-16.936l8.468-14.113zm0-3.887l-12 20h24l-12-20z" />
+                                    <path
+                                        d="M12 5.887l8.468 14.113h-16.936l8.468-14.113zm0-3.887l-12 20h24l-12-20z"
+                                    />
                                 </svg>
                                 Add triangle
                             </button>
-                            <button id="whiteboardCircleBtn"><i class="far fa-circle"></i> Add circle</button>
-                            <button id="whiteboardSaveBtn"><i class="fas fa-save"></i> Save</button>
-                            <button id="whiteboardEraserBtn"><i class="fas fa-eraser"></i> Eraser</button>
-                            <button id="whiteboardCleanBtn"><i class="fas fa-trash"></i> Clean</button>
+                            <button id="whiteboardCircleBtn">
+                                <i class="far fa-circle"></i> Add circle
+                            </button>
+                            <button id="whiteboardSaveBtn">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button id="whiteboardEraserBtn">
+                                <i class="fas fa-eraser"></i> Eraser
+                            </button>
+                            <button id="whiteboardCleanBtn">
+                                <i class="fas fa-trash"></i> Clean
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1054,11 +1404,19 @@ access to use this app.
         <!-- Start File Send -->
 
         <div id="sendFileDiv" class="center fadein">
-            <img id="imgShareSend" src="../images/share.png" alt="mirotalk-share-send" class="center-img" /><br />
+            <img
+                id="imgShareSend"
+                src="../images/share.png"
+                alt="mirotalk-share-send"
+                class="center-img"
+            />
+            <br />
             <div id="sendFileInfo"></div>
             <div id="sendFilePercentage"></div>
             <progress id="sendProgress" max="0" value="0"></progress>
-            <button id="sendAbortBtn"><i class="fas fa-stop-circle"></i>&nbsp; Abort</button>
+            <button id="sendAbortBtn">
+                <i class="fas fa-stop-circle"></i>&nbsp; Abort
+            </button>
         </div>
 
         <!-- End File Send -->
@@ -1066,12 +1424,22 @@ access to use this app.
         <!-- Start File Receive -->
 
         <div id="receiveFileDiv" class="center fadein">
-            <img id="imgShareReceive" src="../images/share.png" alt="mirotalk-share-receive" class="center-img" /><br />
+            <img
+                id="imgShareReceive"
+                src="../images/share.png"
+                alt="mirotalk-share-receive"
+                class="center-img"
+            />
+            <br />
             <div id="receiveFileInfo"></div>
             <div id="receiveFilePercentage"></div>
             <progress id="receiveProgress" max="0" value="0"></progress>
-            <button id="receiveAbortBtn"><i class="fas fa-stop-circle"></i>&nbsp; Abort</button>
-            <button id="receiveHideBtn"><i class="fas fa-eye-slash"></i>&nbsp; Hide</button>
+            <button id="receiveAbortBtn">
+                <i class="fas fa-stop-circle"></i>&nbsp; Abort
+            </button>
+            <button id="receiveHideBtn">
+                <i class="fas fa-eye-slash"></i>&nbsp; Hide
+            </button>
         </div>
 
         <!-- Stop File Receive -->
@@ -1143,23 +1511,71 @@ access to use this app.
         - https://www.npmjs.com/package/axios                               (https://github.com/axios/axios)
         - https://highlightjs.org/                                          (https://github.com/highlightjs/highlight.js)
         -->
-        <script defer src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/xss/dist/xss.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/fabric@5.3.0-browser/dist/fabric.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.7/tippy-bundle.umd.min.js"></script>
+        <script
+            defer
+            src="https://webrtc.github.io/adapter/adapter-latest.js"
+        ></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/xss/dist/xss.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8"
+        ></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/fabric@5.3.0-browser/dist/fabric.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"
+        ></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.7/tippy-bundle.umd.min.js"
+        ></script>
         <script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script>
-        <script defer src="https://cdn.jsdelivr.net/npm/ua-parser-js@latest/dist/ua-parser.min.js"></script>
-        <script async src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/ua-parser-js@latest/dist/ua-parser.min.js"
+        ></script>
+        <script
+            async
+            src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"
+        ></script>
+        <script
+            defer
+            src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"
+        ></script>
         <script defer src="/socket.io/socket.io.js"></script>
         <script defer src="../js/localStorage.js"></script>
         <script defer src="../js/helpers.js"></script>
