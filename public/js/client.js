@@ -15,7 +15,7 @@
  * @license For commercial use or closed source, contact us at license.mirotalk@gmail.com or purchase directly from CodeCanyon
  * @license CodeCanyon: https://codecanyon.net/item/mirotalk-p2p-webrtc-realtime-video-conferences/38376661
  * @author  Miroslav Pejic - miroslav.pejic.85@gmail.com
- * @version 1.4.86
+ * @version 1.4.97
  */
 
 "use strict";
@@ -1854,6 +1854,28 @@ async function checkInitConfig() {
 }
 
 /**
+ * Detects whether the camera stream is front-facing ('user') or rear-facing ('environment').
+ * Defaults to 'user' (front-facing) if detection fails (e.g., desktop cameras).
+ * @param {MediaStream} stream - The video stream from `getUserMedia`.
+ * @returns {string} 'user' (front) or 'environment' (rear).
+ */
+function detectCameraFacingMode(stream) {
+    if (!stream || !stream.getVideoTracks().length) {
+        console.warn(
+            "No video track found in the stream. Defaulting to 'user'.",
+        );
+        return "user";
+    }
+    const videoTrack = stream.getVideoTracks()[0];
+    const settings = videoTrack.getSettings();
+    const capabilities = videoTrack.getCapabilities?.() || {};
+    // Priority: settings.facingMode (actual) → capabilities.facingMode (possible) → default 'user'
+    const facingMode = settings.facingMode || capabilities.facingMode?.[0] ||
+        "user";
+    return facingMode === "environment" ? "environment" : "user"; // Force valid output
+}
+
+/**
  * Change init camera by device id
  * @param {string} deviceId
  */
@@ -1902,6 +1924,9 @@ async function changeInitCamera(deviceId) {
      */
     function updateInitLocalVideoMediaStream(camStream) {
         if (camStream) {
+            // Detect camera
+            camera = detectCameraFacingMode(camStream);
+            console.log("Detect Camera facing mode", camera);
             // We going to update init video stream
             initVideo.srcObject = camStream;
             initStream = camStream;
@@ -1984,6 +2009,8 @@ async function changeLocalCamera(deviceId) {
      */
     function updateLocalVideoMediaStream(camStream) {
         if (camStream) {
+            camera = detectCameraFacingMode(camStream);
+            console.log("Detect Camera facing mode", camera);
             myVideo.srcObject = camStream;
             localVideoMediaStream = camStream;
             logStreamSettingsInfo(
@@ -6485,22 +6512,14 @@ function setupVideoUrlPlayer() {
  * Handle Camera mirror logic
  */
 async function handleLocalCameraMirror() {
-    if (isDesktopDevice) {
-        // Desktop devices...
-        if (!initVideo.classList.contains("mirror")) {
-            initVideo.classList.toggle("mirror");
-        }
-        if (!myVideo.classList.contains("mirror")) {
-            myVideo.classList.toggle("mirror");
-        }
+    if (camera === "environment") {
+        // Back camera → No mirror
+        initVideo.classList.remove("mirror");
+        myVideo.classList.remove("mirror");
     } else {
-        // Mobile, Tablet, IPad devices...
-        if (initVideo.classList.contains("mirror")) {
-            initVideo.classList.remove("mirror");
-        }
-        if (myVideo.classList.contains("mirror")) {
-            myVideo.classList.remove("mirror");
-        }
+        // Disable mirror for rear camera
+        initVideo.classList.add("mirror");
+        myVideo.classList.add("mirror");
     }
 }
 
@@ -7263,7 +7282,12 @@ async function toggleScreenSharing(init = false) {
                     : elemDisplay(myPrivacyBtn, true);
             }
 
-            if (isScreenStreaming || isVideoPinned) myVideoPinBtn.click();
+            if (
+                (isScreenStreaming && thereArePeerConnections()) ||
+                isVideoPinned
+            ) {
+                myVideoPinBtn.click();
+            }
         }
     } catch (err) {
         err.name === "NotAllowedError"
@@ -7986,7 +8010,7 @@ function handleMediaRecorderStop(event) {
         });
         isRecScreenStream = false;
     }
-    recordStreamBtn.style.setProperty("color", "#000");
+    recordStreamBtn.style.setProperty("color", "#ffffff");
     downloadRecordedStream();
     setTippy(recordStreamBtn, "Start recording", placement);
     if (isMobileDevice) elemDisplay(swapCameraBtn, true, "block");
@@ -11964,7 +11988,7 @@ function showAbout() {
         position: "center",
         title: brand.about?.title && brand.about.title.trim() !== ""
             ? brand.about.title
-            : "WebRTC P2P v1.4.86",
+            : "WebRTC P2P v1.4.97",
         imageUrl: brand.about?.imageUrl && brand.about.imageUrl.trim() !== ""
             ? brand.about.imageUrl
             : images.about,

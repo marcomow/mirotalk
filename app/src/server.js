@@ -9,8 +9,10 @@ http://patorjk.com/software/taag/#p=display&f=ANSI%20Regular&t=Server
 
 dependencies: {
     @mattermost/client      : https://www.npmjs.com/package/@mattermost/client
+    @ngrok/ngrok            : https://www.npmjs.com/package/@ngrok/ngrok
     @sentry/node            : https://www.npmjs.com/package/@sentry/node
     axios                   : https://www.npmjs.com/package/axios
+    chokidar                : https://www.npmjs.com/package/chokidar
     colors                  : https://www.npmjs.com/package/colors
     compression             : https://www.npmjs.com/package/compression
     cors                    : https://www.npmjs.com/package/cors
@@ -21,10 +23,10 @@ dependencies: {
     express-openid-connect  : https://www.npmjs.com/package/express-openid-connect
     he                      : https://www.npmjs.com/package/he
     helmet                  : https://www.npmjs.com/package/helmet
+    httpolyglot             : https://www.npmjs.com/package/httpolyglot
     jsdom                   : https://www.npmjs.com/package/jsdom
     jsonwebtoken            : https://www.npmjs.com/package/jsonwebtoken
     js-yaml                 : https://www.npmjs.com/package/js-yaml
-    ngrok                   : https://www.npmjs.com/package/ngrok
     nodemailer              : https://www.npmjs.com/package/nodemailer
     openai                  : https://www.npmjs.com/package/openai
     qs                      : https://www.npmjs.com/package/qs
@@ -43,7 +45,7 @@ dependencies: {
  * @license For commercial use or closed source, contact us at license.mirotalk@gmail.com or purchase directly from CodeCanyon
  * @license CodeCanyon: https://codecanyon.net/item/mirotalk-p2p-webrtc-realtime-video-conferences/38376661
  * @author  Miroslav Pejic - miroslav.pejic.85@gmail.com
- * @version 1.4.86
+ * @version 1.4.97
  */
 
 "use strict"; // https://www.w3schools.com/js/js_strict.asp
@@ -52,8 +54,7 @@ require("dotenv").config();
 
 const { auth, requiresAuth } = require("express-openid-connect");
 const { Server } = require("socket.io");
-const http = require("http");
-const https = require("https");
+const httpolyglot = require("httpolyglot");
 const compression = require("compression");
 const express = require("express");
 const cors = require("cors");
@@ -80,49 +81,28 @@ const nodemailer = require("./lib/nodemailer");
 
 const packageJson = require("../../package.json");
 
-const domain = process.env.HOST || "localhost";
-const isHttps = process.env.HTTPS == "true"; // Use self-signed certificates instead of Certbot and Let's Encrypt
 const port = process.env.PORT || 3000; // must be the same to client.js signalingServerPort
-const host = `http${isHttps ? "s" : ""}://${domain}:${port}`;
+const host = process.env.HOST || `http://localhost:${port}`;
 
 const authHost = new Host(); // Authenticated IP by Login
 
-let server;
+// Define paths to the SSL key and certificate files
+const keyPath = path.join(__dirname, "../ssl/key.pem");
+const certPath = path.join(__dirname, "../ssl/cert.pem");
 
-if (isHttps) {
-    // Define paths to the SSL key and certificate files
-    const keyPath = path.join(__dirname, "../ssl/key.pem");
-    const certPath = path.join(__dirname, "../ssl/cert.pem");
+// Read SSL key and certificate files securely
+const options = {
+    key: fs.readFileSync(keyPath, "utf-8"),
+    cert: fs.readFileSync(certPath, "utf-8"),
+};
 
-    // Check if SSL key file exists
-    if (!fs.existsSync(keyPath)) {
-        log.error("SSL key file not found.");
-        process.exit(1); // Exit the application if the key file is missing
-    }
-
-    // Check if SSL certificate file exists
-    if (!fs.existsSync(certPath)) {
-        log.error("SSL certificate file not found.");
-        process.exit(1); // Exit the application if the certificate file is missing
-    }
-
-    // Read SSL key and certificate files securely
-    const options = {
-        key: fs.readFileSync(keyPath, "utf-8"),
-        cert: fs.readFileSync(certPath, "utf-8"),
-    };
-
-    // Create HTTPS server using self-signed certificates
-    server = https.createServer(options, app);
-} else {
-    server = http.createServer(app);
-}
+// Server both http and https
+const server = httpolyglot.createServer(options, app);
 
 // Trust Proxy
 const trustProxy = !!getEnvBoolean(process.env.TRUST_PROXY);
 
 // Cors
-
 const cors_origin = process.env.CORS_ORIGIN;
 const cors_methods = process.env.CORS_METHODS;
 
@@ -201,7 +181,7 @@ const apiDisabledString = process.env.API_DISABLED || '["token", "meetings"]';
 const api_disabled = JSON.parse(apiDisabledString);
 
 // Ngrok config
-const ngrok = require("ngrok");
+const ngrok = require("@ngrok/ngrok");
 const ngrokEnabled = getEnvBoolean(process.env.NGROK_ENABLED);
 const ngrokAuthToken = process.env.NGROK_AUTH_TOKEN;
 
@@ -479,16 +459,6 @@ app.use((req, res, next) => {
 // Mattermost
 const mattermost = new mattermostCli(app, mattermostCfg);
 
-// POST start from here...
-app.post("*", function (next) {
-    next();
-});
-
-// GET start from here...
-app.get("*", function (next) {
-    next();
-});
-
 // Remove trailing slashes in url handle bad requests
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError || err.status === 400 || "body" in err) {
@@ -762,7 +732,7 @@ app.get("/join/:roomId", function (req, res) {
 });
 
 // Not specified correctly the room id
-app.get("/join/*", function (req, res) {
+app.get("/join/\\*", function (req, res) {
     res.redirect("/");
 });
 
@@ -1074,7 +1044,7 @@ function getMeetingURL(host) {
 // end of MiroTalk API v1
 
 // not match any of page before, so 404 not found
-app.get("*", function (req, res) {
+app.use((req, res) => {
     res.sendFile(views.notFound);
 });
 
@@ -1105,7 +1075,6 @@ function getServerConfig(tunnel = false) {
             : false,
         presenters: roomPresenters,
         ip_whitelist: ipWhitelist.enabled ? ipWhitelist : false,
-        self_signed_certificate: isHttps,
         api_key_secret: api_key_secret,
 
         // Media and Connection Settings
@@ -1146,13 +1115,12 @@ function getServerConfig(tunnel = false) {
 async function ngrokStart() {
     try {
         await ngrok.authtoken(ngrokAuthToken);
-        await ngrok.connect(port);
-        const api = ngrok.getApi();
-        const list = await api.listTunnels();
-        const tunnel = list.tunnels[0].public_url;
-        log.info("Server config", getServerConfig(tunnel));
+        const listener = await ngrok.forward({ addr: port });
+        const tunnelUrl = listener.url();
+        log.info("Server config", getServerConfig(tunnelUrl));
     } catch (err) {
-        log.warn("[Error] ngrokStart", err.body);
+        log.warn("[Error] ngrokStart", err);
+        await ngrok.kill();
         process.exit(1);
     }
 }
@@ -1176,7 +1144,7 @@ server.listen(port, null, () => {
     );
 
     // https tunnel
-    if (ngrokEnabled && isHttps === false) {
+    if (ngrokEnabled) {
         ngrokStart();
     } else {
         log.info("Server config", getServerConfig());
@@ -2428,3 +2396,18 @@ function safeRequire(filePath) {
     }
     return data;
 }
+
+/**
+ * Cleanup HTML injector when the application is shutting down
+ */
+process.on("SIGINT", () => {
+    log.debug("PROCESS", "SIGINT");
+    htmlInjector.cleanup();
+    process.exit();
+});
+
+process.on("SIGTERM", () => {
+    log.debug("PROCESS", "SIGTERM");
+    htmlInjector.cleanup();
+    process.exit();
+});
