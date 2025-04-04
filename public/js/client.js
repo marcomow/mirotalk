@@ -12552,9 +12552,10 @@ function getName(name) {
  * @param {boolean} yes true/false
  */
 function elemDisplay(element, display, mode = "inline") {
-    try{
-    element.style.display = display ? mode : "none";
-    } catch(){}
+    try {
+        element.style.display = display ? mode : "none";
+    } catch (error) {
+    }
 }
 
 /**
