@@ -45,7 +45,7 @@ dependencies: {
  * @license For commercial use or closed source, contact us at license.mirotalk@gmail.com or purchase directly from CodeCanyon
  * @license CodeCanyon: https://codecanyon.net/item/mirotalk-p2p-webrtc-realtime-video-conferences/38376661
  * @author  Miroslav Pejic - miroslav.pejic.85@gmail.com
- * @version 1.4.97
+ * @version 1.5.10
  */
 
 "use strict"; // https://www.w3schools.com/js/js_strict.asp
@@ -66,7 +66,7 @@ const app = express();
 const fs = require("fs");
 const checkXSS = require("./xss.js");
 const ServerApi = require("./api");
-const mattermostCli = require("./mattermost");
+const MattermostController = require("./mattermost");
 const Validate = require("./validate");
 const HtmlInjector = require("./htmlInjector");
 const Host = require("./host");
@@ -278,16 +278,6 @@ if (configChatGPT.enabled) {
     }
 }
 
-// Mattermost config
-const mattermostCfg = {
-    enabled: getEnvBoolean(process.env.MATTERMOST_ENABLED),
-    server_url: process.env.MATTERMOST_SERVER_URL,
-    username: process.env.MATTERMOST_USERNAME,
-    password: process.env.MATTERMOST_PASSWORD,
-    token: process.env.MATTERMOST_TOKEN,
-    api_disabled: api_disabled,
-};
-
 // IP Whitelist
 const ipWhitelist = {
     enabled: getEnvBoolean(process.env.IP_WHITELIST_ENABLED),
@@ -301,6 +291,12 @@ const OIDC = {
     enabled: process.env.OIDC_ENABLED
         ? getEnvBoolean(process.env.OIDC_ENABLED)
         : false,
+    allowRoomCreationForAuthUsers:
+        process.env.OIDC_ALLOW_ROOMS_CREATION_FOR_AUTH_USERS
+            ? getEnvBoolean(
+                process.env.OIDC_ALLOW_ROOMS_CREATION_FOR_AUTH_USERS,
+            )
+            : false,
     baseUrlDynamic: process.env.OIDC_BASE_URL_DYNAMIC
         ? getEnvBoolean(process.env.OIDC_BASE_URL_DYNAMIC)
         : false,
@@ -368,6 +364,19 @@ function OIDCAuth(req, res, next) {
     }
 }
 
+// Mattermost config
+const mattermostCfg = {
+    enabled: getEnvBoolean(process.env.MATTERMOST_ENABLED),
+    server_url: process.env.MATTERMOST_SERVER_URL,
+    username: process.env.MATTERMOST_USERNAME,
+    password: process.env.MATTERMOST_PASSWORD,
+    token: process.env.MATTERMOST_TOKEN,
+    roomTokenExpire: process.env.MATTERMOST_ROOM_TOKEN_EXPIRE,
+    encryptionKey: process.env.JWT_KEY,
+    security: hostCfg.protected || OIDC.enabled,
+    api_disabled: api_disabled,
+};
+
 // stats configuration
 const statsData = {
     enabled: process.env.STATS_ENABLED
@@ -406,15 +415,20 @@ app.set("trust proxy", trustProxy); // Enables trust for proxy headers (e.g., X-
 app.use(helmet.noSniff()); // Enable content type sniffing prevention
 
 // Use all static files from the public folder
-app.use(
-    express.static(dir.public, {
-        setHeaders: (res, filePath) => {
-            if (filePath.endsWith(".js")) {
-                res.setHeader("Content-Type", "application/javascript");
-            } //...
-        },
-    }),
-);
+const staticOptions = {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith(".js")) {
+            res.setHeader("Content-Type", "application/javascript");
+        }
+        // Add other headers if needed...
+    },
+};
+
+// Serve static files from root (/)
+app.use(express.static(dir.public, staticOptions));
+
+// Also serve the same files under /mattermost
+app.use("/mattermost", express.static(dir.public, staticOptions));
 
 app.use(cors(corsOptions)); // Enable CORS with options
 app.use(compression()); // Compress all HTTP responses using GZip
@@ -457,7 +471,12 @@ app.use((req, res, next) => {
 });
 
 // Mattermost
-const mattermost = new mattermostCli(app, mattermostCfg);
+const mattermost = new MattermostController(
+    app,
+    mattermostCfg,
+    htmlInjector,
+    views.client,
+);
 
 // Remove trailing slashes in url handle bad requests
 app.use((err, req, res, next) => {
@@ -1308,6 +1327,7 @@ io.sockets.on("connect", async (socket) => {
             channel_password,
             peer_uuid,
             peer_name,
+            peer_avatar,
             peer_nickname,
             peer_token,
             peer_video,
@@ -1431,6 +1451,7 @@ io.sockets.on("connect", async (socket) => {
         // collect peers info grp by channels
         peers[channel][socket.id] = {
             peer_name: peer_name,
+            peer_avatar: peer_avatar,
             peer_nickname: peer_nickname,
             peer_presenter: isPresenter,
             peer_video: peer_video,
@@ -1595,7 +1616,7 @@ io.sockets.on("connect", async (socket) => {
         // Prevent XSS injection
         const config = checkXSS(cfg);
         // log.debug('Peer name', config);
-        const { room_id, peer_name_old, peer_name_new } = config;
+        const { room_id, peer_name_old, peer_name_new, peer_avatar } = config;
 
         let peer_id_to_update = null;
 
@@ -1624,6 +1645,7 @@ io.sockets.on("connect", async (socket) => {
             const data = {
                 peer_id: peer_id_to_update,
                 peer_name: peer_name_new,
+                peer_avatar: peer_avatar,
             };
             log.debug(
                 "[" + socket.id + "] emit peerName to [room_id: " + room_id +
@@ -1737,6 +1759,7 @@ io.sockets.on("connect", async (socket) => {
             peer_id,
             peer_uuid,
             peer_name,
+            peer_avatar,
             peer_use_video,
             peer_action,
             send_to_all,
@@ -1759,6 +1782,7 @@ io.sockets.on("connect", async (socket) => {
         const data = {
             peer_id: peer_id,
             peer_name: peer_name,
+            peer_avatar: peer_avatar,
             peer_action: peer_action,
             peer_use_video: peer_use_video,
         };
@@ -1835,7 +1859,8 @@ io.sockets.on("connect", async (socket) => {
         // Prevent XSS injection
         const config = checkXSS(cfg);
         // log.debug('File info', config);
-        const { room_id, peer_id, peer_name, broadcast, file } = config;
+        const { room_id, peer_id, peer_name, peer_avatar, broadcast, file } =
+            config;
 
         // check if valid fileName
         if (!isValidFileName(file.fileName)) {
@@ -1855,6 +1880,7 @@ io.sockets.on("connect", async (socket) => {
                 "] send file to room_id [" + room_id + "]",
             {
                 peerName: peer_name,
+                peerAvatar: peer_avatar,
                 fileName: file.fileName,
                 fileSize: bytesToSize(file.fileSize),
                 fileType: file.fileType,
@@ -2296,6 +2322,8 @@ function getActiveRooms() {
  */
 function isAllowedRoomAccess(logMessage, req, hostCfg, peers, roomId) {
     const OIDCUserAuthenticated = OIDC.enabled && req.oidc.isAuthenticated();
+    const OIDCAllowRoomCreationForAuthUsers =
+        OIDC.allowRoomCreationForAuthUsers;
     const hostUserAuthenticated = hostCfg.protected && hostCfg.authenticated;
     const roomExist = roomId in peers;
     const roomCount = Object.keys(peers).length;
@@ -2305,6 +2333,7 @@ function isAllowedRoomAccess(logMessage, req, hostCfg, peers, roomId) {
         (hostUserAuthenticated && roomExist) || // User authenticated via Login and room Exist
         ((OIDCUserAuthenticated || hostUserAuthenticated) &&
             roomCount === 0) || // User authenticated joins the first room
+        (OIDCUserAuthenticated && OIDCAllowRoomCreationForAuthUsers) || // Allow room creation if authenticated via OIDC
         roomExist; // User Or Guest join an existing Room
 
     log.debug(logMessage, {
@@ -2317,6 +2346,7 @@ function isAllowedRoomAccess(logMessage, req, hostCfg, peers, roomId) {
             OIDCUserEnabled: OIDC.enabled,
             hostProtected: hostCfg.protected,
             hostAuthenticated: hostCfg.authenticated,
+            OIDCAllowRoomCreationForAuthUsers,
         },
         allowRoomAccess: allowRoomAccess,
     });

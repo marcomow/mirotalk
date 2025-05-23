@@ -9,7 +9,7 @@ module.exports = {
             language: "en", // https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
             name: "MiroTalk",
             title:
-                "MiroTalk<br />Free browser based Real-time video calls.<br />Simple, Secure, Fast.",
+                "<h1>MiroTalk</h1>Free browser based Real-time video calls.<br />Simple, Secure, Fast.",
             description:
                 "Start your next video call with a single click. No download, plug-in, or login is required. Just get straight to talking, messaging, and sharing your screen.",
             joinDescription: "Pick a room name.<br />How about this one?",
@@ -70,7 +70,7 @@ module.exports = {
                     href="https://www.linkedin.com/in/miroslav-pejic-976a07101/" target="_blank"> 
                     Miroslav Pejic
                 </a>
-                <br /><br />
+                <br />
                 Email:<a 
                     id="email-button" 
                     data-umami-event="Email button" 
@@ -92,6 +92,7 @@ module.exports = {
      */
     buttons: {
         main: {
+            showShareQr: true,
             showShareRoomBtn: false, // For guests
             showHideMeBtn: false,
             showAudioBtn: true,
