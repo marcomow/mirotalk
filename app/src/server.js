@@ -1814,6 +1814,15 @@ io.sockets.on("connect", async (socket) => {
         await sendToRoom(room_id, socket.id, "rpgMeet", data);
     });
 
+    socket.on("overlay", async (cfg) => {
+        const { room_id, data, peer_id } = cfg;
+
+        await sendToRoom(room_id, socket.id, "overlay", {
+            data,
+            peer_id,
+        });
+    });
+
     /**
      * Start caption
      */

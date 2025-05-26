@@ -34,29 +34,41 @@ window.addEventListener("message", (event) => {
     }
     const isOverlayEvent = event.data.type === "overlay";
     if (isOverlayEvent) {
-        const overlaySettings = event.data.data.overlaySettings;
-        const interval = setInterval(() => {
-            const container = document.querySelector("#myVideoWrap");
-            if (container) {
-                clearInterval(interval);
-                const oldWrapper = container.querySelector("[overlay-wrapper]");
-                if (oldWrapper) oldWrapper.remove();
-
-                const wrapper = document.createElement("div");
-                wrapper.setAttribute("overlay-wrapper", "");
-                container.appendChild(wrapper);
-                updateOverlay(wrapper, overlaySettings);
-            }
-        }, 200);
+        const overlayEvent = event.data.data;
+        console.warn({ overlayEvent });
+        const overlaySettings = overlayEvent.overlaySettings;
+        sendToServer("overlay", {
+            room_id: roomId,
+            peer_id: myPeerId,
+            data: overlayEvent,
+        });
+        tryUpdateOverlay("myVideoWrap", overlaySettings);
     }
 });
+
+const tryUpdateOverlay = (containerId, overlaySettings) => {
+    const interval = setInterval(() => {
+        console.warn("attempt");
+        const container = document.querySelector(`#${containerId}`);
+        if (container) {
+            clearInterval(interval);
+            const oldWrapper = container.querySelector("[overlay-wrapper]");
+            if (oldWrapper) oldWrapper.remove();
+
+            const wrapper = document.createElement("div");
+            wrapper.setAttribute("overlay-wrapper", "");
+            container.appendChild(wrapper);
+            updateOverlay(wrapper, overlaySettings);
+        }
+    }, 200);
+};
 
 const updateOverlay = (wrapper, overlaySettings) => {
     const OVERLAY_TABLE_SETTINGS = {
         rows: {
             defaultValue: 2,
             min: 0,
-            max: 12,
+            max: 10,
         },
         columns: {
             defaultValue: 2,
@@ -85,7 +97,7 @@ const updateOverlay = (wrapper, overlaySettings) => {
         const titleElement = wrapper.querySelector(".title") ||
             document.createElement("div");
         titleElement.className =
-            "col-start-4 row-start-11 col-span-6 bg-blue-600 bg-opacity-50 text-white text-center font-bold flex flex-col justify-center";
+            "col-start-4 row-start-11 col-span-6 bg-black bg-opacity-50 text-white text-center font-bold flex flex-col justify-center notranslate";
         titleElement.style.fontSize = `${fontSizeInEm(titleFontSize)}em`;
         titleElement.innerText = title;
         wrapper.append(titleElement);
@@ -95,7 +107,7 @@ const updateOverlay = (wrapper, overlaySettings) => {
         const subtitleElement = wrapper.querySelector(".subtitle") ||
             document.createElement("div");
         subtitleElement.className =
-            "col-start-4 row-start-12 col-span-6 bg-blue-600 bg-opacity-50 text-white text-center font-bold flex flex-col justify-center";
+            "col-start-4 row-start-12 col-span-6 bg-black bg-opacity-50 text-white text-center font-bold flex flex-col justify-center notranslate";
         subtitleElement.style.fontSize = `${fontSizeInEm(subtitleFontSize)}em`;
         subtitleElement.innerText = subtitle;
         wrapper.append(subtitleElement);
@@ -138,7 +150,7 @@ const updateOverlay = (wrapper, overlaySettings) => {
             ) {
                 const cellElement = document.createElement("div");
                 cellElement.className =
-                    "text-center flex flex-col justify-center";
+                    "text-center flex flex-col justify-center notranslate";
                 cellElement.innerText =
                     overlaySettings[`table_${rowIndex}_${columnIndex}`] || "";
                 cellElement.style.fontSize = `${tableFontSizeInEm}em`;

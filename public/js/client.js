@@ -1235,6 +1235,7 @@ function initClientPeer() {
     signalingSocket.on("disconnect", handleDisconnect);
     signalingSocket.on("removePeer", handleRemovePeer);
     signalingSocket.on("rpgMeet", handleRpgMeet);
+    signalingSocket.on("overlay", handleOverlay);
 } // end [initClientPeer]
 
 /**
@@ -10053,6 +10054,15 @@ function handlePeerAction(config) {
 function handleRpgMeet(rgpMeetEvent) {
     console.log({ rgpMeetEvent });
     window.parent.postMessage(rgpMeetEvent, "*");
+}
+
+function handleOverlay(overlayEventReceived) {
+    console.log({ overlayEventReceived });
+    const peerVideoWrapperId = `${overlayEventReceived.peer_id}_videoWrap`;
+    tryUpdateOverlay(
+        peerVideoWrapperId,
+        overlayEventReceived.data.overlaySettings,
+    );
 }
 
 /**
