@@ -79,7 +79,7 @@ const updateOverlay = (wrapper, overlaySettings) => {
     if (!active) wrapper.remove();
 
     wrapper.className =
-        `absolute top-0 bottom-0 left-0 right-0 grid grid-cols-12 grid-rows-12`;
+        `absolute bottom-0 left-0 right-0 grid grid-cols-12 grid-rows-12`;
 
     if (title) {
         const titleElement = wrapper.querySelector(".title") ||
