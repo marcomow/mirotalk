@@ -10106,7 +10106,7 @@ function handleEmoji(message, duration = 5000) {
             emojiDisplay.remove();
         }, duration);
 
-        handleEmojiSound(message);
+        // handleEmojiSound(message);
     }
 }
 

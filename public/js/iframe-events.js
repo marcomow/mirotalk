@@ -48,7 +48,6 @@ window.addEventListener("message", (event) => {
 
 const tryUpdateOverlay = (containerId, overlaySettings) => {
     const interval = setInterval(() => {
-        console.warn("attempt");
         const container = document.querySelector(`#${containerId}`);
         if (container) {
             clearInterval(interval);
