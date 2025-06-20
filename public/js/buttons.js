@@ -13,6 +13,7 @@ let buttons = {
         showAudioBtn: true,
         showVideoBtn: true,
         showScreenBtn: true, // autodetected
+        showAudioShareBtn: true, // autodetected
         showRecordStreamBtn: true,
         showChatRoomBtn: true,
         showCaptionRoomBtn: true,

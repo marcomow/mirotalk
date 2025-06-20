@@ -63,6 +63,8 @@ const className = {
     videoOff: "fas fa-video-slash",
     screenOn: "fas fa-desktop",
     screenOff: "fas fa-stop-circle",
+    audioShareOn: "fas fa-volume-high",
+    audioShareOff: "fas fa-stop-circle",
     handPulsate: "fas fa-hand-paper pulsate",
     privacy: "far fa-circle",
     snapShot: "fas fa-camera-retro",
@@ -168,6 +170,7 @@ const initVideo = getId("initVideo");
 const initVideoBtn = getId("initVideoBtn");
 const initAudioBtn = getId("initAudioBtn");
 const initScreenShareBtn = getId("initScreenShareBtn");
+const initAudioShareBtn = getId("initAudioShareBtn");
 const initVideoMirrorBtn = getId("initVideoMirrorBtn");
 const initUsernameEmojiButton = getId("initUsernameEmojiButton");
 const initVideoSelect = getId("initVideoSelect");
@@ -198,6 +201,7 @@ const videoBtn = getId("videoBtn");
 const swapCameraBtn = getId("swapCameraBtn");
 const hideMeBtn = getId("hideMeBtn");
 const screenShareBtn = getId("screenShareBtn");
+const audioShareBtn = getId("audioShareBtn");
 const myHandBtn = getId("myHandBtn");
 const leaveRoomBtn = getId("leaveRoomBtn");
 
@@ -545,6 +549,7 @@ let myVideoStatus = false;
 let myAudioStatus = false;
 let myVideoStatusBefore = false;
 let myScreenStatus = false;
+let myAudioShareStatus = false;
 let isScreenEnabled = getScreenEnabled();
 let notify = getNotify(); // popup room sharing on join
 let notifyBySound = true; // turn on - off sound notifications
@@ -600,6 +605,8 @@ let isVideoFullScreenSupported = false;
 let isVideoOnFullScreen = false;
 let isScreenSharingSupported = false;
 let isScreenStreaming = false;
+let isAudioSharingSupported = false;
+let isAudioStreaming = false;
 let isHideMeActive = getHideMeActive();
 let remoteMediaControls = false; // enable - disable peers video player controls (default false)
 let camera = "user"; // user = front-facing camera on a smartphone. | environment = the back camera on a smartphone.
@@ -718,6 +725,7 @@ function setButtonsToolTip() {
     if (isMobileDevice) return;
     // Init buttons
     setTippy(initScreenShareBtn, "Toggle screen sharing", "top");
+    setTippy(initAudioShareBtn, "Toggle audio sharing", "top");
     setTippy(initVideoMirrorBtn, "Toggle video mirror", "top");
     setTippy(initUsernameEmojiButton, "Toggle username emoji", "top");
     // Main buttons
@@ -862,6 +870,7 @@ function refreshMainButtonsToolTipPlacement() {
         bottomButtonsPlacement,
     );
     setTippy(screenShareBtn, "Start screen sharing", bottomButtonsPlacement);
+    setTippy(audioShareBtn, "Start audio sharing", bottomButtonsPlacement);
     setTippy(myHandBtn, "Raise your hand", bottomButtonsPlacement);
     setTippy(chatRoomBtn, "Open the chat", bottomButtonsPlacement);
     setTippy(mySettingsBtn, "Open the settings", bottomButtonsPlacement);
@@ -1446,6 +1455,7 @@ function handleButtonsRule() {
     elemDisplay(audioBtn, buttons.main.showAudioBtn);
     elemDisplay(videoBtn, buttons.main.showVideoBtn);
     //elemDisplay(screenShareBtn, buttons.main.showScreenBtn, ); // auto-detected
+    //elemDisplay(audioShareBtn, buttons.main.showAudioShareBtn, ); // auto-detected
     elemDisplay(recordStreamBtn, buttons.main.showRecordStreamBtn);
     elemDisplay(recImage, buttons.main.showRecordStreamBtn);
     elemDisplay(chatRoomBtn, buttons.main.showChatRoomBtn);
@@ -1593,6 +1603,9 @@ async function whoAreYou() {
     }
     if (!buttons.main.showScreenBtn) {
         elemDisplay(document.getElementById("initScreenShareBtn"), false);
+    }
+    if (!buttons.main.showAudioShareBtn) {
+        elemDisplay(document.getElementById("initAudioShareBtn"), false);
     }
 
     initUser.classList.toggle("hidden");
@@ -2150,6 +2163,7 @@ async function joinToChannel() {
         peer_video_status: myVideoStatus,
         peer_audio_status: myAudioStatus,
         peer_screen_status: myScreenStatus,
+        peer_audio_share_status: myAudioShareStatus,
         peer_hand_status: myHandStatus,
         peer_rec_status: isStreamRecording,
         peer_privacy_status: isVideoPrivacyActive,
@@ -4948,6 +4962,7 @@ function manageButtons() {
     setShareRoomBtn();
     setRecordStreamBtn();
     setScreenShareBtn();
+    setAudioShareBtn();
     setFullScreenBtn();
     setChatRoomBtn();
     setCaptionRoomBtn();
@@ -5114,6 +5129,28 @@ function setScreenShareBtn() {
         elemDisplay(initScreenShareBtn, false);
         elemDisplay(screenShareBtn, false);
         elemDisplay(screenFpsDiv, false);
+    }
+}
+
+/**
+ * Check if i can share audio, if yes show button else hide it
+ */
+function setAudioShareBtn() {
+    if (
+        !isMobileDevice &&
+        (navigator.getDisplayMedia || navigator.mediaDevices.getDisplayMedia) &&
+        buttons.main.showAudioShareBtn
+    ) {
+        isAudioSharingSupported = true;
+        initAudioShareBtn.addEventListener("click", async (e) => {
+            await toggleAudioSharing(true);
+        });
+        audioShareBtn.addEventListener("click", async (e) => {
+            await toggleAudioSharing();
+        });
+    } else {
+        elemDisplay(initAudioShareBtn, false);
+        elemDisplay(audioShareBtn, false);
     }
 }
 
@@ -7444,6 +7481,135 @@ function setScreenSharingStatus(status) {
 }
 
 /**
+ * Toggle audio sharing and handle related actions
+ * @param {boolean} init - Indicates if it's the initial audio share state
+ */
+async function toggleAudioSharing(init = false) {
+    try {
+        // Audio share constraints - only audio, no video
+        const constraints = {
+            audio: true,
+            video: false,
+        };
+
+        // Check if audio is disabled
+        if (!isAudioStreaming && !useAudio) {
+            return handleToggleAudioException(
+                "Audio is disabled",
+                init,
+            );
+        }
+
+        // Get audio media stream based on current state
+        const audioMediaPromise = isAudioStreaming
+            ? await navigator.mediaDevices.getUserMedia({
+                audio: await getAudioConstraints(),
+            })
+            : await navigator.mediaDevices.getDisplayMedia(constraints);
+
+        if (audioMediaPromise) {
+            isAudioStreaming = !isAudioStreaming;
+            myAudioShareStatus = isAudioStreaming;
+
+            if (isAudioStreaming) {
+                emitPeersAction("audioShareStart");
+            } else {
+                emitPeersAction("audioShareStop");
+            }
+
+            await emitPeerStatus("audioShare", myAudioShareStatus);
+
+            // Only update audio track, preserve existing video track
+            await refreshMyLocalStream(audioMediaPromise, true);
+            await refreshMyStreamToPeers(audioMediaPromise, true);
+
+            if (init) {
+                // Handle init media stream - only update audio part
+                if (initStream && hasAudioTrack(audioMediaPromise)) {
+                    // Replace only the audio track in initStream
+                    const audioTrack = audioMediaPromise.getAudioTracks()[0];
+                    const existingVideoTrack = hasVideoTrack(initStream)
+                        ? initStream.getVideoTracks()[0]
+                        : null;
+
+                    if (existingVideoTrack) {
+                        initStream = new MediaStream([
+                            existingVideoTrack,
+                            audioTrack,
+                        ]);
+                    } else {
+                        initStream = new MediaStream([audioTrack]);
+                    }
+                } else if (!initStream) {
+                    initStream = audioMediaPromise;
+                }
+            }
+
+            setAudioSharingStatus(isAudioStreaming);
+
+            // on toggleAudioSharing audio stop from popup bar
+            if (isAudioStreaming && hasAudioTrack(audioMediaPromise)) {
+                audioMediaPromise.getAudioTracks()[0].onended = () => {
+                    toggleAudioSharing();
+                };
+            }
+        }
+    } catch (err) {
+        err.name === "NotAllowedError"
+            ? console.error("Audio sharing permission was denied by the user.")
+            : await handleToggleAudioException(
+                `[Warning] Unable to share audio: ${err}`,
+                init,
+            );
+        if (init) return;
+    }
+}
+
+/**
+ * Handle exception and actions when toggling audio sharing
+ * @param {string} reason - The reason message
+ * @param {boolean} init - Indicates whether it's an initial state
+ */
+async function handleToggleAudioException(reason, init) {
+    try {
+        console.warn("handleToggleAudioException", reason);
+
+        // Inform peers about audio sharing stop
+        emitPeersAction("audioShareStop");
+
+        // Toggle audio streaming status
+        isAudioStreaming = !isAudioStreaming;
+        myAudioShareStatus = isAudioStreaming;
+
+        // Update audio sharing status
+        setAudioSharingStatus(isAudioStreaming);
+
+        // Emit audio share status to peers
+        await emitPeerStatus("audioShare", myAudioShareStatus);
+    } catch (error) {
+        console.error("[Error] An unexpected error occurred", error);
+    }
+}
+
+/**
+ * Set Audio Sharing Status
+ * @param {boolean} status of audio sharing
+ */
+function setAudioSharingStatus(status) {
+    initAudioShareBtn.className = status
+        ? className.audioShareOff
+        : className.audioShareOn;
+    audioShareBtn.className = status
+        ? className.audioShareOff
+        : className.audioShareOn;
+    setTippy(
+        audioShareBtn,
+        status ? "Stop audio sharing" : "Start audio sharing",
+        placement,
+    );
+}
+
+/**
  * Set myVideoStatus true
  */
 async function setMyVideoStatusTrue() {
@@ -7522,11 +7688,11 @@ async function refreshMyStreamToPeers(stream, localAudioTrackChange = false) {
         : localStreamHasAudioTrack && localAudioMediaStream;
 
     // Determine the audio track to replace to peers
-    const audioTrack =
-        streamHasAudioTrack && (localAudioTrackChange || isScreenStreaming)
-            ? stream.getAudioTracks()[0]
-            : localStreamHasAudioTrack &&
-                localAudioMediaStream.getAudioTracks()[0];
+    const audioTrack = streamHasAudioTrack &&
+            (localAudioTrackChange || isScreenStreaming || isAudioStreaming)
+        ? stream.getAudioTracks()[0]
+        : localStreamHasAudioTrack &&
+            localAudioMediaStream.getAudioTracks()[0];
 
     // Determine the video stream to add to peers
     const videoStream = streamHasVideoTrack
@@ -7620,15 +7786,17 @@ async function refreshMyLocalStream(stream, localAudioTrackChange = false) {
         : hasVideoTrack(localVideoMediaStream) &&
             localVideoMediaStream.getVideoTracks()[0];
 
-    const audioTrack = hasAudioTrack(stream) && localAudioTrackChange
-        ? stream.getAudioTracks()[0]
-        : hasAudioTrack(localAudioMediaStream) &&
-            localAudioMediaStream.getAudioTracks()[0];
+    const audioTrack =
+        hasAudioTrack(stream) && (localAudioTrackChange || isAudioStreaming)
+            ? stream.getAudioTracks()[0]
+            : hasAudioTrack(localAudioMediaStream) &&
+                localAudioMediaStream.getAudioTracks()[0];
 
     // https://developer.mozilla.org/en-US/docs/Web/API/MediaStream
     if (useVideo || isScreenStreaming) {
         console.log("Refresh my local media stream VIDEO - AUDIO", {
             isScreenStreaming: isScreenStreaming,
+            isAudioStreaming: isAudioStreaming,
         });
         if (videoTrack) {
             tracksToInclude.push(videoTrack);
@@ -7650,8 +7818,10 @@ async function refreshMyLocalStream(stream, localAudioTrackChange = false) {
             );
         }
     } else {
-        console.log("Refresh my local media stream AUDIO");
-        if (useAudio && audioTrack) {
+        console.log("Refresh my local media stream AUDIO", {
+            isAudioStreaming: isAudioStreaming,
+        });
+        if ((useAudio || isAudioStreaming) && audioTrack) {
             tracksToInclude.push(audioTrack);
             localAudioMediaStream = new MediaStream([audioTrack]);
             getMicrophoneVolumeIndicator(localAudioMediaStream);
@@ -7668,9 +7838,20 @@ async function refreshMyLocalStream(stream, localAudioTrackChange = false) {
         setVideoPrivacyStatus("myVideo", isVideoPrivacyActive);
 
         // on toggleScreenSharing video stop from popup bar
-        stream.getVideoTracks()[0].onended = () => {
-            toggleScreenSharing();
-        };
+        if (hasVideoTrack(stream)) {
+            stream.getVideoTracks()[0].onended = () => {
+                toggleScreenSharing();
+            };
+        }
+    }
+
+    if (isAudioStreaming) {
+        // on toggleAudioSharing audio stop from popup bar
+        if (hasAudioTrack(stream)) {
+            stream.getAudioTracks()[0].onended = () => {
+                toggleAudioSharing();
+            };
+        }
     }
 
     // adapt video object fit on screen streaming
@@ -9768,6 +9949,9 @@ function handlePeerStatus(config) {
         case "privacy":
             setVideoPrivacyStatus(peer_id + "___video", status);
             break;
+        case "audioShare":
+            setPeerAudioShareStatus(peer_id, status);
+            break;
         default:
             break;
     }
@@ -9811,6 +9995,34 @@ function setPeerAudioStatus(peer_id, status) {
     }
     if (peerAudioVolume) {
         elemDisplay(peerAudioVolume, status);
+    }
+}
+
+/**
+ * Set Participant Audio Share Status
+ * @param {string} peer_id socket.id
+ * @param {boolean} status of peer audio sharing
+ */
+function setPeerAudioShareStatus(peer_id, status) {
+    console.log(`Peer ${peer_id} audio sharing status: ${status}`);
+    // Audio sharing doesn't have a visual indicator like video,
+    // but we can log it and potentially show notifications
+    if (status) {
+        userLog(
+            "toast",
+            `${icons.user} ${
+                allPeers[peer_id]["peer_name"]
+            } started audio sharing`,
+        );
+        playSound("on");
+    } else {
+        userLog(
+            "toast",
+            `${icons.user} ${
+                allPeers[peer_id]["peer_name"]
+            } stopped audio sharing`,
+        );
+        playSound("off");
     }
 }
 
@@ -10043,6 +10255,12 @@ function handlePeerAction(config) {
         case "screenStop":
             handleScreenStop(peer_id, peer_use_video);
             break;
+        case "audioShareStart":
+            handleAudioShareStart(peer_id);
+            break;
+        case "audioShareStop":
+            handleAudioShareStop(peer_id);
+            break;
         case "ejectAll":
             handleKickedOut(config);
             break;
@@ -10189,6 +10407,31 @@ function handleScreenStart(peer_id) {
         remoteVideoStream.style.name = peer_id + "_typeScreen";
     }
     if (remoteVideoAvatarImage) elemDisplay(remoteVideoAvatarImage, false);
+}
+
+/**
+ * Handle Audio Share Start
+ * @param {string} peer_id
+ */
+function handleAudioShareStart(peer_id) {
+    console.log("Peer " + peer_id + " started audio sharing");
+    userLog(
+        "toast",
+        `${icons.user} ${allPeers[peer_id]["peer_name"]} started audio sharing`,
+    );
+    playSound("newMessage");
+}
+
+/**
+ * Handle Audio Share Stop
+ * @param {string} peer_id
+ */
+function handleAudioShareStop(peer_id) {
+    console.log("Peer " + peer_id + " stopped audio sharing");
+    userLog(
+        "toast",
+        `${icons.user} ${allPeers[peer_id]["peer_name"]} stopped audio sharing`,
+    );
 }
 
 /**
