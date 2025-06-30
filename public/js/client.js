@@ -7489,7 +7489,7 @@ async function toggleAudioSharing(init = false) {
         // Audio share constraints - only audio, no video
         const constraints = {
             audio: true,
-            video: false,
+            video: true,
         };
 
         // Check if audio is disabled
@@ -7501,11 +7501,9 @@ async function toggleAudioSharing(init = false) {
         }
 
         // Get audio media stream based on current state
-        const audioMediaPromise = isAudioStreaming
-            ? await navigator.mediaDevices.getUserMedia({
-                audio: await getAudioConstraints(),
-            })
-            : await navigator.mediaDevices.getDisplayMedia(constraints);
+        const audioMediaPromise = await navigator.mediaDevices.getDisplayMedia(
+            constraints,
+        );
 
         if (audioMediaPromise) {
             isAudioStreaming = !isAudioStreaming;
@@ -7528,18 +7526,18 @@ async function toggleAudioSharing(init = false) {
                 if (initStream && hasAudioTrack(audioMediaPromise)) {
                     // Replace only the audio track in initStream
                     const audioTrack = audioMediaPromise.getAudioTracks()[0];
-                    const existingVideoTrack = hasVideoTrack(initStream)
-                        ? initStream.getVideoTracks()[0]
-                        : null;
+                    // const existingVideoTrack = hasVideoTrack(initStream)
+                    //     ? initStream.getVideoTracks()[0]
+                    //     : null;
 
-                    if (existingVideoTrack) {
-                        initStream = new MediaStream([
-                            existingVideoTrack,
-                            audioTrack,
-                        ]);
-                    } else {
-                        initStream = new MediaStream([audioTrack]);
-                    }
+                    // if (existingVideoTrack) {
+                    //     initStream = new MediaStream([
+                    //         existingVideoTrack,
+                    //         audioTrack,
+                    //     ]);
+                    // } else {
+                    initStream = new MediaStream([audioTrack]);
+                    // }
                 } else if (!initStream) {
                     initStream = audioMediaPromise;
                 }
